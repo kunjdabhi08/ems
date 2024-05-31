@@ -6,13 +6,17 @@
     </div>
 </div>
 <div class="container">
-    <table mat-table [dataSource]="designations">
+    <mat-form-field class="w-25">
+        <mat-label>Search by Designation</mat-label>
+        <input matInput placeholder="Search" (keyup)="searchRecord($event)">
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="id">
-            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Id </th>
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef mat-sort-header> Id </th>
             <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.designationId}} </td>
         </ng-container>
         <ng-container matColumnDef="name">
-            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Name </th>
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef mat-sort-header> Name </th>
             <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.name}} </td>
         </ng-container>
         <ng-container matColumnDef="actions">
@@ -25,6 +29,8 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
 
+    </table>
+    <mat-paginator  [pageSizeOptions]="[2, 10, 25, 100]" showFirstLastButtons aria-label="Select page of users"></mat-paginator>
+    
 </div>

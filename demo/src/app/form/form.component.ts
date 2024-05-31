@@ -32,10 +32,12 @@ export class FormComponent implements OnInit {
 
   employeeForm!: FormGroup;
 
-  id = this.route.snapshot.paramMap.get('id') as number | null;
+  id:number;
+
 
   ngOnInit(): void {
-    if (this.id) {
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.id > 0) {
       this.empService.getEmployeeById(this.id).subscribe((data) => {
 
         this.employeeForm.patchValue({
@@ -58,9 +60,9 @@ export class FormComponent implements OnInit {
     });
 
     this.employeeForm = new FormGroup<EmployeeFormType>({
-      name: new FormControl('', [Validators.required, Validators.min(6), Validators.max(20)]),
-      email: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
-      phone: new FormControl('',[Validators.required, Validators.pattern(/\d{10}$/)]),
+      name: new FormControl(null, [Validators.required, Validators.min(6), Validators.max(20)]),
+      email: new FormControl(null, [Validators.required, Validators.pattern(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
+      phone: new FormControl(null,[Validators.required, Validators.pattern(/\d{10}$/)]),
       designation: new FormControl(0,Validators.required),
       id: new FormControl(0)
     })

@@ -1,40 +1,45 @@
-
 <div class="d-flex justify-content-between align-items-center container mt-5 mb-3">
     <h1 class="mat-h1 fw-bold">Employees</h1>
     <div class="d-flex gap-2">
-        <button mat-flat-button color="primary" routerLink="designations" class="mat-body-1">Manage Designations</button>
-        <button mat-flat-button color="primary"  routerLink="addEmployee" class="mat-body-1">Add Employee</button>
+        <button mat-flat-button color="primary" routerLink="designations" class="mat-body-1">Manage
+            Designations</button>
+        <button mat-flat-button color="primary" routerLink="addEmployee" class="mat-body-1">Add Employee</button>
     </div>
 </div>
 <div class="container">
-    <table mat-table [dataSource]="employees" >
+    <mat-form-field class="w-25">
+        <mat-label>Search by name, email, designation</mat-label>
+        <input matInput placeholder="Search" (keyup)="searchRecord($event)">
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSource" matSort >
         <ng-container matColumnDef="name">
-            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Name </th>
-            <td mat-cell  class="mat-body-1"  *matCellDef="let e" > {{e.name}} </td>
+            <th mat-header-cell  class="mat-h2 fw-medium" *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.name}} </td>
         </ng-container>
         <ng-container matColumnDef="email">
-            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Email </th>
-            <td mat-cell  class="mat-body-1"  *matCellDef="let e"> {{e.email}} </td>
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.email}} </td>
         </ng-container>
-        <ng-container matColumnDef="phone">
-            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Phone </th>
-            <td mat-cell  class="mat-body-1"  *matCellDef="let e"> {{e.phone}} </td>
+        <ng-container matColumnDef="phone"> 
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef mat-sort-header> Phone </th>
+            <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.phone}} </td>
         </ng-container>
         <ng-container matColumnDef="designation">
-            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Designation </th>
-            <td mat-cell  class="mat-body-1"  *matCellDef="let e"> {{e.designationName}} </td>
-        </ng-container> 
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef mat-sort-header> Designation </th>
+            <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.designationName}} </td>
+        </ng-container>
         <ng-container matColumnDef="actions">
             <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef>Actions</th>
             <td class=" gap-2" mat-cell *matCellDef="let e">
-                <button mat-flat-button class="btn btn-success" color="primary" routerLink="editEmployee/{{e.id}}">Edit</button>
-                <button mat-flat-button class="btn btn-danger ms-2" color="warn" (click)="deleteEmloyee(e.id)">Delete</button>
+                <button mat-flat-button class="btn btn-success" color="primary"
+                    routerLink="editEmployee/{{e.id}}">Edit</button>
+                <button mat-flat-button class="btn btn-danger ms-2" color="warn"
+                    (click)="deleteEmloyee(e.id)">Delete</button>
             </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-
+    <mat-paginator  [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons aria-label="Select page of users"></mat-paginator>
 </div>
-

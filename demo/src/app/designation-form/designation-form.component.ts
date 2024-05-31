@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './designation-form.component.css'
 })
 export class DesignationFormComponent implements OnInit{
-  id = this.route.snapshot.paramMap.get('id') as number | null;
+  id:number;
   title:string = "Add Designation"
 
   constructor(private desgServive: DesignationService, private router: Router, private route:ActivatedRoute, private location: Location) {
@@ -29,6 +29,7 @@ export class DesignationFormComponent implements OnInit{
   designationForm!: FormGroup;
 
   ngOnInit(): void {
+    this.id = Number(this.route.snapshot.paramMap.get('id'))
     if(this.id){
       this.desgServive.getDesignationById(this.id).subscribe(
       {
