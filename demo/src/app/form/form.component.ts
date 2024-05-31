@@ -92,7 +92,8 @@ export class FormComponent implements OnInit {
             alert(err.message);
           }
         })
-      } else {
+      } 
+      else {
         this.empService.editEmployee(this.employeeForm.value).subscribe(data => this.router.navigate(["/"]))
       }
     }

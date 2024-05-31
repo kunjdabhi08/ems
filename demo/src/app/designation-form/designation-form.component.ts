@@ -16,12 +16,12 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './designation-form.component.html',
   styleUrl: './designation-form.component.css'
 })
-export class DesignationFormComponent implements OnInit{
-  id:number;
-  title:string = "Add Designation"
+export class DesignationFormComponent implements OnInit {
+  id: number;
+  title: string = "Add Designation"
 
-  constructor(private desgServive: DesignationService, private router: Router, private route:ActivatedRoute, private location: Location) {
-    if(this.id){
+  constructor(private desgServive: DesignationService, private router: Router, private route: ActivatedRoute, private location: Location) {
+    if (this.id) {
       this.title = "Edit Designation"
     }
   }
@@ -30,20 +30,20 @@ export class DesignationFormComponent implements OnInit{
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'))
-    if(this.id){
+    if (this.id) {
       this.desgServive.getDesignationById(this.id).subscribe(
-      {
-        next: (data:ResponseModel<Designation>)=>{
-          this.designationForm.patchValue({
-            id: data.data.designationId,
-            name: data.data.name
-          })
-        },
-        error:(err:HttpErrorResponse)=>{
-          alert(err.message)
+        {
+          next: (data: ResponseModel<Designation>) => {
+            this.designationForm.patchValue({
+              id: data.data.designationId,
+              name: data.data.name
+            })
+          },
+          error: (err: HttpErrorResponse) => {
+            alert(err.message)
+          }
         }
-      }
-    );
+      );
     }
 
     this.designationForm = new FormGroup({
@@ -53,29 +53,29 @@ export class DesignationFormComponent implements OnInit{
 
   }
 
-  goBack = ():void=>{
+  goBack = (): void => {
     this.location.back();
   }
 
 
-  onSubmit = ():void => {
+  onSubmit = (): void => {
     this.designationForm.markAllAsTouched();
-    if(this.designationForm.valid){
-      if(this.id){  
+    if (this.designationForm.valid) {
+      if (this.id) {
         this.desgServive.editDesignation(this.designationForm.value).subscribe({
-          next: ()=>{
+          next: () => {
             this.router.navigate(["/designations"])
           },
-          error: (err: HttpErrorResponse)=>{
+          error: (err: HttpErrorResponse) => {
             alert(err.message)
           }
         });
       } else {
         this.desgServive.addDesignation(this.designationForm.value).subscribe({
-          next: ()=>{
+          next: () => {
             this.router.navigate(["/designations"])
           },
-          error: (err: HttpErrorResponse)=>{
+          error: (err: HttpErrorResponse) => {
             alert(err.message)
           }
         });
