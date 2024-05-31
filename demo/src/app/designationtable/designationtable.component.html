@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-between align-items-center container mt-5 mb-3">
+    <h1 class="mat-h1 fw-bold">Designations</h1>
+    <div class="d-flex gap-2">
+        <a mat-flat-button routerLink="" color="primary" class="mat-body-1">Manage Employees</a>
+        <a mat-flat-button routerLink="addDesignation" color="primary" class="mat-body-1">Add Designation</a>
+    </div>
+</div>
+<div class="container">
+    <table mat-table [dataSource]="designations">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Id </th>
+            <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.designationId}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef> Name </th>
+            <td mat-cell class="mat-body-1" *matCellDef="let e"> {{e.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef>Actions</th>
+            <td class=" gap-2" mat-cell *matCellDef="let e">
+                <button mat-flat-button  color="primary" routerLink="editDesignation/{{e.designationId}}">Edit</button>
+                <button mat-flat-button color="warn" class="ms-2" (click)="deleteDesignation(e.designationId)">Delete</button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+</div>

@@ -1,0 +1,18 @@
+﻿namespace employee_management.Models.DTO
+{
+    public class EmployeeDTO
+    {
+        public int? id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Email { get; set; }
+
+        public string Phone { get; set; }
+
+        public int designation { get; set; }    
+
+        public string? designationName {  get; set; }    
+
+    }
+}
