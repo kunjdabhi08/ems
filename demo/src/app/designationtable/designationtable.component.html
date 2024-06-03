@@ -23,7 +23,7 @@
             <th mat-header-cell class="mat-h2 fw-medium" *matHeaderCellDef>Actions</th>
             <td class=" gap-2" mat-cell *matCellDef="let e">
                 <button mat-flat-button  color="primary" routerLink="editDesignation/{{e.designationId}}">Edit</button>
-                <button mat-flat-button color="warn" class="ms-2" (click)="deleteDesignation(e.designationId)">Delete</button>
+                <button mat-flat-button color="warn" class="ms-2" (click)="openDialog(e.designationId)">Delete</button>
             </td>
         </ng-container>
 

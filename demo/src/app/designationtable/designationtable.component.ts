@@ -8,6 +8,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -19,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class DesignationtableComponent implements OnInit {
   
-  constructor(private desgService: DesignationService) {
+  constructor(private desgService: DesignationService, public dialog: MatDialog) {
   }
   designations!: Designation[]
   dataSource = new MatTableDataSource<Designation>();
@@ -31,7 +33,7 @@ export class DesignationtableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
-  ngOnInit(): void {
+  fetchData = ()=> {
     this.desgService.getDesignations().subscribe(data=> {
       this.designations = data.data
       this.dataSource.data = data.data;
@@ -39,23 +41,27 @@ export class DesignationtableComponent implements OnInit {
     });
   }
 
+  ngOnInit(): void {
+    this.fetchData()
+  }
+
+  public openDialog = (e: number) => {
+    const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      data: { id: e, isDesignation:true }
+    });
+
+    confirmationDialog.afterClosed().subscribe(() => {
+      this.fetchData();
+    })
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  deleteDesignation = (id:number | undefined): void => {
-    if(confirm("Are you sure?") && id){
-      this.desgService.delelteDesignation(id).subscribe({
-        next: () => {
-          this.designations = this.designations.filter(x=> x.designationId !== id);
-        },
-        error: (err: HttpErrorResponse) => {
-          alert(err.error);
-        }
-      })
-    } 
-  }
+  
 
   searchRecord = (event) => {
     let search:string = event.target.value;

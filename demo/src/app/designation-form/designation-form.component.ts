@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ResponseModel } from '../../Models/Response.model';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-designation-form',
@@ -20,13 +22,15 @@ export class DesignationFormComponent implements OnInit {
   id: number;
   title: string = "Add Designation"
 
-  constructor(private desgServive: DesignationService, private router: Router, private route: ActivatedRoute, private location: Location) {
+  constructor(private desgServive: DesignationService, private router: Router, private route: ActivatedRoute, private location: Location,public dialog: MatDialog) {
     if (this.id) {
       this.title = "Edit Designation"
     }
   }
 
   designationForm!: FormGroup;
+
+  
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'))
@@ -52,6 +56,9 @@ export class DesignationFormComponent implements OnInit {
     })
 
   }
+
+
+ 
 
   goBack = (): void => {
     this.location.back();

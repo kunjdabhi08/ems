@@ -2,16 +2,14 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { EmployeeService } from '../employee.service';
 import { RouterLink } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Employee } from '../../Models/Employee.model';
 import { ResponseModel } from '../../Models/Response.model';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -21,14 +19,15 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
   templateUrl: './employeetable.component.html',
   styleUrl: './employeetable.component.css'
 })
+
 export class EmployeetableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<Employee>();
   employees: Employee[] = [];
   displayedColumns: string[] = ['name', 'email', 'phone', 'designation', 'actions'];
 
-  constructor(private empService: EmployeeService, public dialog:MatDialog) { }
+  dialogRef = MatDialogRef<ConfirmationDialogComponent>;
 
-
+  constructor(private empService: EmployeeService, public dialog: MatDialog) { }
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -36,12 +35,16 @@ export class EmployeetableComponent implements AfterViewInit {
     this.fetchData();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
   private fetchData = () => {
     this.empService.getEmployee().subscribe({
       next: (resposne: ResponseModel<Employee[]>) => {
         this.employees = resposne.data;
         this.dataSource.data = resposne.data;
-        console.log(this.dataSource);
       },
       error: (err: ResponseModel<null>) => {
         alert(err.message);
@@ -49,28 +52,15 @@ export class EmployeetableComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  public deleteEmloyee = (id: number): void => {
-    if (confirm("Are you sure?")) {
-      this.empService.deleteEmployee(id).subscribe({
-        next: () => {
-          this.fetchData();
-        },
-        error: (err: HttpErrorResponse) => {
-          alert("Error deleting employee");
-        }
-      });
-    }
-  }
-  public openDialog = (e:number) => {
-    this.dialog.open(ConfirmationDialogComponent,{
+  public openDialog = (e: number) => {
+    const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
       width: '500px',
-      data: {id: e}
+      data: { id: e, isDesignation:false }
     });
+
+    confirmationDialog.afterClosed().subscribe(() => {
+      this.fetchData();
+    })
   }
 
   searchRecord = (event) => {
@@ -82,7 +72,4 @@ export class EmployeetableComponent implements AfterViewInit {
       this.dataSource.data = this.employees;
     }
   }
-
-
-
 }
